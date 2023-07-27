@@ -5,11 +5,14 @@ import lombok.AllArgsConstructor;
 
 import static com.dataart.task.magic.coin.optimizer.domain.Coin.*;
 
+/**
+ * The Cash class represents a collection of coins, including moonstones, shards, and florins.
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Cash {
-    private int moonstones;
-    private int shards;
-    private int florins;
+    private int moonstoneAmount;
+    private int shardAmount;
+    private int florinAmount;
 
     public static Cash of(int moonstones, int shards, int florins) {
         if (isValidNumberOfCoins(florins) && isValidNumberOfCoins(shards) && isValidNumberOfCoins(moonstones)) {
@@ -19,13 +22,12 @@ public class Cash {
     }
 
     public int getWeightInDragonScales() {
-        return moonstones * MOONSTONE.getWeightInDragonScales() + shards * SHARD.getWeightInDragonScales() +
-                florins * FLORIN.getWeightInDragonScales();
+        return moonstoneAmount * MOONSTONE.getWeightInDragonScales() + shardAmount * SHARD.getWeightInDragonScales() +
+                florinAmount * FLORIN.getWeightInDragonScales();
     }
 
-
-    public double getWeightInGrams() {
-        return getWeightInDragonScales() * DRAGON_SCALE_IN_GRAM;
+    public double exchangeToFlorins() {
+        return MOONSTONE.exchangeToFlorins(moonstoneAmount) + SHARD.exchangeToFlorins(shardAmount) + florinAmount;
     }
 
     private static boolean isValidNumberOfCoins(int numberOfCoins) {
@@ -35,16 +37,16 @@ public class Cash {
     @Override
     public String toString() {
         StringBuilder cashString = new StringBuilder();
-        if (moonstones > 0) {
-            cashString.append(moonstones)
+        if (moonstoneAmount > 0) {
+            cashString.append(moonstoneAmount)
                     .append(" moonstones,");
         }
-        if (shards > 0) {
-            cashString.append(shards)
+        if (shardAmount > 0) {
+            cashString.append(shardAmount)
                     .append(" shards,");
         }
-        if (florins > 0) {
-            cashString.append(florins)
+        if (florinAmount > 0) {
+            cashString.append(florinAmount)
                     .append(" florins");
         }
         return cashString.toString();

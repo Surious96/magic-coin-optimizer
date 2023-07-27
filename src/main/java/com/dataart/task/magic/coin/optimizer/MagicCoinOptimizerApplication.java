@@ -1,6 +1,8 @@
 package com.dataart.task.magic.coin.optimizer;
 
+import com.dataart.task.magic.coin.optimizer.bank.BankService;
 import com.dataart.task.magic.coin.optimizer.domain.Cash;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -8,7 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @Slf4j
+@RequiredArgsConstructor
 public class MagicCoinOptimizerApplication implements CommandLineRunner {
+
+    final BankService bankService;
 
     public static void main(String[] args) {
         log.info("STARTING THE APPLICATION");
@@ -16,30 +21,15 @@ public class MagicCoinOptimizerApplication implements CommandLineRunner {
         log.info("APPLICATION FINISHED");
     }
 
-    public static Cash receiveInput(String[] args) {
-        if (args.length != 3) {
-            throw new IllegalArgumentException("Please provide exactly three numeric arguments.");
-        }
-
-        try {
-            int moonstones = parseInt(args[0]);
-            int shards = parseInt(args[1]);
-            int florins = parseInt(args[2]);
-            return Cash.of(florins, shards, moonstones);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Error: Invalid numeric argument(s). Please provide valid numbers.");
-        }
-    }
-
-    private static int parseInt(String input) throws NumberFormatException {
-        return Integer.parseInt(input);
-    }
-
     @Override
     public void run(String... args) {
-        Cash customersInput = receiveInput(args);
-        System.out.print("Input: " + customersInput);
-        System.out.printf(" => weight is %d dragonscales%n", customersInput.getWeightInDragonScales());
+        Cash customerInput = bankService.receiveCash(args);
+
+        Cash optimizedCash = bankService.optimize(customerInput);
+        System.out.print("Input: " + customerInput);
+        System.out.printf(" => weight is %d dragonscales%n", customerInput.getWeightInDragonScales());
+        System.out.print("Output: " + optimizedCash);
+        System.out.printf(" => weight is %d dragonscales%n", optimizedCash.getWeightInDragonScales());
     }
 
 }

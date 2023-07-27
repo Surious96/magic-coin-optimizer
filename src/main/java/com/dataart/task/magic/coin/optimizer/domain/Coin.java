@@ -15,7 +15,12 @@ public enum Coin {
 
     private final int weightInDragonScales;
 
-    public double weightInGrams() {
-        return weightInDragonScales * DRAGON_SCALE_IN_GRAM;
+    public double exchangeToFlorins(double coinNumber) {
+        return switch (this) {
+            case FLORIN -> coinNumber;
+            case SHARD -> coinNumber * 8 / 3;
+            case MOONSTONE -> (coinNumber * 8 / 3) * 13 / 5;
+        };
     }
+
 }
