@@ -19,7 +19,7 @@ public enum Coin {
         return switch (this) {
             case FLORIN -> coinNumber;
             case SHARD -> coinNumber * 8 / 3;
-            case MOONSTONE -> (coinNumber * 8 / 3) * 13 / 5;
+            case MOONSTONE -> (coinNumber * 8 / 3) * 2.6;
         };
     }
 

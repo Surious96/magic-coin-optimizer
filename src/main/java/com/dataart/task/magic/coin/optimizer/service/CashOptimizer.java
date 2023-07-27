@@ -22,14 +22,14 @@ public class CashOptimizer {
 
         // checking with florins and shards
         int shardsMaxCount = (int) (cashInFlorins / SHARD.exchangeToFlorins(1));
-        int florins = (int) (cashInFlorins - SHARD.exchangeToFlorins(shardsMaxCount));
+        int florins = (int) Math.ceil(cashInFlorins - SHARD.exchangeToFlorins(shardsMaxCount));
 
         Cash florinsAndShardsCash = Cash.of(0, shardsMaxCount, florins);
         exchangedCashes.add(florinsAndShardsCash);
 
         // checking with florins and moonstones
         int moonstonesMaxCount = (int) (cashInFlorins / MOONSTONE.exchangeToFlorins(1));
-        florins = (int) (cashInFlorins - MOONSTONE.exchangeToFlorins(moonstonesMaxCount));
+        florins = (int) Math.ceil(cashInFlorins - MOONSTONE.exchangeToFlorins(moonstonesMaxCount));
 
         Cash florinsAndMoonstonesCash = Cash.of(moonstonesMaxCount, 0, florins);
         exchangedCashes.add(florinsAndMoonstonesCash);
@@ -39,7 +39,7 @@ public class CashOptimizer {
         cashInFlorins -= MOONSTONE.exchangeToFlorins(moonstonesMaxCount);
 
         shardsMaxCount = (int) (cashInFlorins / SHARD.exchangeToFlorins(1));
-        cashInFlorins -= SHARD.exchangeToFlorins(shardsMaxCount);
+        cashInFlorins = Math.ceil(cashInFlorins - SHARD.exchangeToFlorins(shardsMaxCount));
 
         Cash cashInAllCoins = Cash.of(moonstonesMaxCount, shardsMaxCount, (int) cashInFlorins);
         exchangedCashes.add(cashInAllCoins);
